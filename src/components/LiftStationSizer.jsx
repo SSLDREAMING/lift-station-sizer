@@ -14,6 +14,21 @@ const WELL_RIGHT = WELL_LEFT + WELL_PX_W;  // 290
 const SIM_TICK_MS = 50;
 const GPF = 7.48052;  // gallons per cubic foot
 
+// ─── Float type definitions ───────────────────────────────────────────────────
+// Each float switch in a real lift station has a specific role.
+// hasPump:true  → float triggers a pump (pumpDischarge field shown)
+// hasPump:false → informational/alarm only (pumpDischarge forced to 0)
+const FLOAT_TYPES = [
+  { value: 'pump-off',   label: 'Pump OFF',          color: '#22c55e', hasPump: false, note: (f) => `All pumps turn OFF when WL drops to ${f.elevation.toFixed(2)}′` },
+  { value: 'lead-pump',  label: 'Lead Pump ON',       color: '#ef4444', hasPump: true,  note: (f) => `Lead pump ON when WL ≥ ${f.elevation.toFixed(2)}′` },
+  { value: 'lag-pump',   label: 'Lag Pump ON',        color: '#f97316', hasPump: true,  note: (f) => `Lag pump ON when WL ≥ ${f.elevation.toFixed(2)}′` },
+  { value: 'pump-2-off', label: 'Pump 2 OFF',         color: '#84cc16', hasPump: false, note: (f) => `Pump 2 turns OFF when WL drops to ${f.elevation.toFixed(2)}′` },
+  { value: 'aux-pump',   label: 'Aux / 3rd Pump ON',  color: '#a855f7', hasPump: true,  note: (f) => `Auxiliary pump ON when WL ≥ ${f.elevation.toFixed(2)}′` },
+  { value: 'hi-alarm',   label: 'Hi-Water Alarm',     color: '#f59e0b', hasPump: false, note: (f) => `High-water alarm at ${f.elevation.toFixed(2)}′` },
+  { value: 'custom',     label: 'Custom',             color: '#94a3b8', hasPump: true,  note: (f) => f.pumpDischarge > 0 ? `Pump ON when WL ≥ ${f.elevation.toFixed(2)}′` : `Marker at ${f.elevation.toFixed(2)}′` },
+];
+const ftDef = (type) => FLOAT_TYPES.find(t => t.value === type) ?? FLOAT_TYPES[FLOAT_TYPES.length - 1];
+
 // ─── Standalone simulation step (no closures) ───────────────────────────────
 // Pump hysteresis: a pump latches ON when water reaches its float elevation.
 // It stays ON until water drops back to the lowest float elevation (Pump OFF level).
@@ -128,9 +143,9 @@ function saveLS(key, val) {
 export default function LiftStationSizer() {
   const [wetWell, setWetWell] = useState(() => loadLS('wetWell', { width: 6, depth: 15, bottomElev: 95.0 }));
   const [floats, setFloats] = useState(() => loadLS('floats', [
-    { id: 1, name: 'Pump OFF',  elevation: 97.5,  color: '#22c55e', pumpDischarge: 0   },
-    { id: 2, name: 'Pump ON',   elevation: 99.5,  color: '#ef4444', pumpDischarge: 450 },
-    { id: 3, name: 'Hi-Water',  elevation: 101.5, color: '#f59e0b', pumpDischarge: 0   },
+    { id: 1, type: 'pump-off',  name: 'Pump OFF',       elevation: 97.5,  color: '#22c55e', pumpDischarge: 0   },
+    { id: 2, type: 'lead-pump', name: 'Lead Pump ON',   elevation: 99.5,  color: '#ef4444', pumpDischarge: 450 },
+    { id: 3, type: 'hi-alarm',  name: 'Hi-Water Alarm', elevation: 101.5, color: '#f59e0b', pumpDischarge: 0   },
   ]));
   const [inlets, setInlets] = useState(() => loadLS('inlets', [
     { id: 1, name: 'Inlet 1', elevation: 103.0, diameter: 8, flowRate: 500, startTime: 0, duration: 300 },
@@ -268,9 +283,8 @@ export default function LiftStationSizer() {
   const startDrag = (type, id) => (e) => { e.preventDefault(); dragging.current = { type, id }; };
 
   const addFloat = () => {
-    const colors = ['#a855f7', '#06b6d4', '#ec4899', '#84cc16', '#f97316'];
-    const elev   = parseFloat((wetWell.bottomElev + wetWell.depth * 0.5).toFixed(2));
-    setFloats(prev => [...prev, { id: nextId, name: `Float ${nextId}`, elevation: elev, color: colors[nextId % colors.length], pumpDischarge: 0 }]);
+    const elev = parseFloat((wetWell.bottomElev + wetWell.depth * 0.5).toFixed(2));
+    setFloats(prev => [...prev, { id: nextId, type: 'custom', name: 'Custom', elevation: elev, color: '#94a3b8', pumpDischarge: 0 }]);
     setNextId(n => n + 1);
   };
   const removeFloat = (id) => setFloats(prev => prev.filter(f => f.id !== id));
@@ -885,38 +899,82 @@ export default function LiftStationSizer() {
             <Section key={key} title="FLOATS" accent="#94a3b8"
               action={<Btn onClick={addFloat}>+ Float</Btn>}
               onMoveUp={up} onMoveDown={down}>
-              {floats.map(f => (
-                <div key={f.id} style={styles.itemBlock}>
-                  <div style={styles.itemHeader}>
-                    <div style={{ width: 10, height: 10, borderRadius: '50%', background: f.color, flexShrink: 0 }} />
-                    <input value={f.name}
-                      onChange={e => setFloats(prev => prev.map(x => x.id === f.id ? { ...x, name: e.target.value } : x))}
-                      style={styles.textInput} />
-                    <DelBtn onClick={() => removeFloat(f.id)} />
+              {floats.map(f => {
+                const def = ftDef(f.type);
+                return (
+                  <div key={f.id} style={styles.itemBlock}>
+                    {/* ── Type selector ── */}
+                    <div style={{ marginBottom: 6 }}>
+                      <div style={{ fontSize: 9, color: '#475569', fontWeight: 700, letterSpacing: 1, marginBottom: 3 }}>FLOAT TYPE</div>
+                      <select
+                        value={f.type ?? 'custom'}
+                        onChange={e => {
+                          const t = ftDef(e.target.value);
+                          setFloats(prev => prev.map(x => x.id === f.id ? {
+                            ...x,
+                            type:          t.value,
+                            name:          t.label,
+                            color:         t.color,
+                            pumpDischarge: t.hasPump ? x.pumpDischarge : 0,
+                          } : x));
+                        }}
+                        style={{
+                          width: '100%', background: '#0a0f1e',
+                          border: `1px solid ${f.color}55`,
+                          borderLeft: `3px solid ${f.color}`,
+                          borderRadius: 4, color: f.color,
+                          padding: '4px 8px', fontSize: 12, fontWeight: 700,
+                          cursor: 'pointer',
+                        }}
+                      >
+                        {FLOAT_TYPES.map(ft => (
+                          <option key={ft.value} value={ft.value} style={{ color: '#e2e8f0', background: '#0a0f1e' }}>
+                            {ft.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* ── Name + delete ── */}
+                    <div style={styles.itemHeader}>
+                      <div style={{ width: 10, height: 10, borderRadius: '50%', background: f.color, flexShrink: 0 }} />
+                      <input value={f.name}
+                        onChange={e => setFloats(prev => prev.map(x => x.id === f.id ? { ...x, name: e.target.value } : x))}
+                        style={styles.textInput} />
+                      <DelBtn onClick={() => removeFloat(f.id)} />
+                    </div>
+
+                    {/* ── Elevation ── */}
+                    <div style={styles.itemBody}>
+                      <span style={styles.lbl}>Elev</span>
+                      <NumInput value={f.elevation}
+                        min={wetWell.bottomElev} max={wetWell.bottomElev + wetWell.depth} step={0.01}
+                        onChange={v => setFloats(prev => prev.map(x => x.id === f.id ? { ...x, elevation: v } : x))} />
+                      <span style={styles.unit}>ft</span>
+                      <input type="range"
+                        min={wetWell.bottomElev} max={wetWell.bottomElev + wetWell.depth} step={0.05}
+                        value={f.elevation}
+                        onChange={e => setFloats(prev => prev.map(x => x.id === f.id ? { ...x, elevation: parseFloat(e.target.value) } : x))}
+                        style={{ flex: 1, accentColor: f.color }} />
+                    </div>
+
+                    {/* ── Pump discharge — only for pump types ── */}
+                    {def.hasPump && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 5 }}>
+                        <span style={{ fontSize: 10, color: '#ef4444', flexShrink: 0 }}>Discharge</span>
+                        <NumInput value={f.pumpDischarge} min={0} max={5000} step={10}
+                          onChange={v => setFloats(prev => prev.map(x => x.id === f.id ? { ...x, pumpDischarge: v } : x))} />
+                        <span style={styles.unit}>gpm</span>
+                      </div>
+                    )}
+
+                    {/* ── Role note ── */}
+                    <div style={{ ...S.note, color: `${f.color}bb`, marginTop: 4 }}>
+                      {def.note(f)}
+                    </div>
                   </div>
-                  <div style={styles.itemBody}>
-                    <span style={styles.lbl}>Elev</span>
-                    <NumInput value={f.elevation}
-                      min={wetWell.bottomElev} max={wetWell.bottomElev + wetWell.depth} step={0.01}
-                      onChange={v => setFloats(prev => prev.map(x => x.id === f.id ? { ...x, elevation: v } : x))} />
-                    <span style={styles.unit}>ft</span>
-                    <input type="range"
-                      min={wetWell.bottomElev} max={wetWell.bottomElev + wetWell.depth} step={0.05}
-                      value={f.elevation}
-                      onChange={e => setFloats(prev => prev.map(x => x.id === f.id ? { ...x, elevation: parseFloat(e.target.value) } : x))}
-                      style={{ flex: 1, accentColor: f.color }} />
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 5 }}>
-                    <span style={{ fontSize: 10, color: '#ef4444', flexShrink: 0 }}>Pump Discharge</span>
-                    <NumInput value={f.pumpDischarge} min={0} max={5000} step={10}
-                      onChange={v => setFloats(prev => prev.map(x => x.id === f.id ? { ...x, pumpDischarge: v } : x))} />
-                    <span style={styles.unit}>gpm</span>
-                  </div>
-                  {f.pumpDischarge > 0 && (
-                    <div style={S.note}>Pump activates when WL ≥ {f.elevation.toFixed(2)}′</div>
-                  )}
-                </div>
-              ))}
+                );
+              })}
             </Section>
           );
 
