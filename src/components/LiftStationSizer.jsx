@@ -29,6 +29,81 @@ const FLOAT_TYPES = [
 ];
 const ftDef = (type) => FLOAT_TYPES.find(t => t.value === type) ?? FLOAT_TYPES[FLOAT_TYPES.length - 1];
 
+// ─── Theme tokens ─────────────────────────────────────────────────────────────
+const DARK = {
+  bg:            '#0a0f1e', sectionBg:  '#111827', sectionHead: '#1e293b',
+  inputBg:       '#0a0f1e', svgBg:      '#0d1a2d', chipBg:      '#0a0f1e',
+  chartBg:       '#0d1a2d', chartBdr:   '#1e293b', floatDimBg:  '#0a0f1e',
+  pumpElevBg:    '#0a0f1e',
+  border:        '#1e293b', borderMid:  '#334155', borderFaint: '#0f172a',
+  text:          '#e2e8f0', textSub:    '#94a3b8', textMid:     '#64748b', textFaint: '#475569',
+  accent:        '#38bdf8', accentSub:  '#7dd3fc', paneHeader:  '#7dd3fc',
+  dimArrow:      '#7dd3fc', floatDimArrow: '#94a3b8',
+  addBtnBg:      '#1e3a8a', addBtnText: '#bfdbfe',
+  simNeutralBg:  '#1e293b', simNeutralBdr: '#334155', simNeutralText: '#94a3b8',
+  arrowOn:       '#64748b', arrowOff:   '#1e293b', arrowHover:  '#94a3b8',
+  wellWall:      '#2d3f55', wellInterior: '#0d1a2d',
+  waterFill:     '#1e3a8a', waterOpacity: 0.65,
+  pumpBody:      '#162032', pumpStroke: '#475569', pumpLabel:   '#475569',
+  pumpElev:      '#7dd3fc', pumpHandle: '#1e293b',
+  elevLabel:     '#64748b', scaleAxis:  '#1e3a5f', scaleTick:   '#334155',
+  ground:        '#78716c', groundHatch: '#6b5c45', infoText:   '#475569',
+  svgScaleBg:    '#1e3a5f', svgScaleLine: '#38bdf8',
+  wlColor:       '#38bdf8',
+};
+const LIGHT = {
+  bg:            '#f8f4ec', sectionBg:  '#fefcf7', sectionHead: '#ede9de',
+  inputBg:       '#fefcf7', svgBg:      '#eee9dc', chipBg:      '#e8e4d8',
+  chartBg:       '#f0ece2', chartBdr:   '#d9d0bc', floatDimBg:  '#e8edf5',
+  pumpElevBg:    '#e8edf5',
+  border:        '#d9d0bc', borderMid:  '#b8a99a', borderFaint: '#e8e4d8',
+  text:          '#1e293b', textSub:    '#374151', textMid:     '#6b7280', textFaint: '#9ca3af',
+  accent:        '#0284c7', accentSub:  '#0369a1', paneHeader:  '#0369a1',
+  dimArrow:      '#0284c7', floatDimArrow: '#6b7280',
+  addBtnBg:      '#1d4ed8', addBtnText: '#ffffff',
+  simNeutralBg:  '#e2ddd5', simNeutralBdr: '#c4b9a5', simNeutralText: '#374151',
+  arrowOn:       '#6b7280', arrowOff:   '#d4c9b5', arrowHover:  '#1e293b',
+  wellWall:      '#8fa4b8', wellInterior: '#dde8f2',
+  waterFill:     '#3b82f6', waterOpacity: 0.5,
+  pumpBody:      '#c8d8e8', pumpStroke: '#6b7280', pumpLabel:   '#374151',
+  pumpElev:      '#1d4ed8', pumpHandle: '#e8edf5',
+  elevLabel:     '#6b7280', scaleAxis:  '#9ca3af', scaleTick:   '#9ca3af',
+  ground:        '#a89070', groundHatch: '#c4a06e', infoText:   '#6b7280',
+  svgScaleBg:    '#b8cfe8', svgScaleLine: '#1d4ed8',
+  wlColor:       '#0284c7',
+};
+function makeStyles(T) {
+  return {
+    root:          { display:'flex', minHeight:'100vh', fontFamily:"'Segoe UI',system-ui,sans-serif", background:T.bg, color:T.text, overflow:'auto' },
+    leftPanel:     { width:250, flexShrink:0, overflowY:'auto', padding:12, borderRight:`1px solid ${T.border}`, background:T.bg },
+    svgPane:       { flexShrink:0, padding:12, display:'flex', flexDirection:'column', gap:6, borderRight:`1px solid ${T.border}`, overflowY:'auto' },
+    rightPanel:    { width:310, flexShrink:0, overflowY:'auto', padding:12, background:T.bg },
+    panel:         { flex:1, overflowY:'auto', padding:12, minWidth:280, maxWidth:420 },
+    paneHeader:    { fontSize:11, fontWeight:700, letterSpacing:2, color:T.paneHeader, paddingBottom:4 },
+    svg:           { background:T.svgBg, borderRadius:8, border:`1px solid ${T.border}`, userSelect:'none', display:'block' },
+    simBar:        { display:'flex', alignItems:'center', gap:8, padding:'8px 2px 2px', borderTop:`1px solid ${T.border}`, flexWrap:'wrap' },
+    simBtn:        { padding:'5px 12px', border:'1px solid', borderRadius:4, fontSize:12, fontWeight:700, cursor:'pointer', letterSpacing:0.5 },
+    section:       { marginBottom:12, background:T.sectionBg, borderRadius:8, overflow:'hidden', border:`1px solid ${T.border}` },
+    sectionHeader: { padding:'6px 10px', background:T.sectionHead, display:'flex', justifyContent:'space-between', alignItems:'center' },
+    sectionTitle:  { fontSize:11, fontWeight:700, letterSpacing:1.5 },
+    sectionBody:   { padding:'8px 10px' },
+    row:           { display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:7 },
+    lbl:           { fontSize:11, color:T.textSub, flexShrink:0 },
+    unit:          { fontSize:11, color:T.textMid, flexShrink:0 },
+    numInput:      { width:82, background:T.inputBg, border:`1px solid ${T.borderMid}`, borderRadius:4, color:T.text, padding:'3px 7px', fontSize:13, textAlign:'right' },
+    textInput:     { flex:1, background:T.inputBg, border:`1px solid ${T.borderMid}`, borderRadius:4, color:T.text, padding:'3px 6px', fontSize:12 },
+    addBtn:        { background:T.addBtnBg, color:T.addBtnText, border:'none', borderRadius:4, padding:'3px 9px', fontSize:11, cursor:'pointer', fontWeight:600 },
+    delBtn:        { background:'none', border:'none', color:'#ef4444', cursor:'pointer', fontSize:14, padding:'0 3px', lineHeight:1 },
+    itemBlock:     { marginBottom:10, paddingBottom:10, borderBottom:`1px solid ${T.border}` },
+    itemHeader:    { display:'flex', alignItems:'center', gap:6, marginBottom:5 },
+    itemBody:      { display:'flex', alignItems:'center', gap:5, flex:1 },
+    sumRow:        { display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:6, paddingBottom:6, borderBottom:`1px solid ${T.border}` },
+    sumVal:        { fontSize:13, color:T.text, fontWeight:600 },
+    sumNote:       { fontSize:10, color:T.textMid, marginTop:1 },
+    arrowOn:       T.arrowOn, arrowOff: T.arrowOff, arrowHover: T.arrowHover,
+  };
+}
+
 // ─── Standalone simulation step (no closures) ───────────────────────────────
 // Pump hysteresis: a pump latches ON when water reaches its float elevation.
 // It stays ON until water drops back to the lowest float elevation (Pump OFF level).
@@ -155,6 +230,7 @@ export default function LiftStationSizer() {
   const [pump, setPump] = useState(() => loadLS('pump', { baseOffset: 0, height: 3 }));
   const [svgScale, setSvgScale] = useState(() => loadLS('svgScale', 1.0));
   const [rightOrder, setRightOrder] = useState(() => loadLS('rightOrder', ['floats', 'inlets', 'volumes', 'summary', 'simulation']));
+  const [isDark, setIsDark] = useState(() => loadLS('isDark', true));
 
   const [sim, setSim] = useState({
     isRunning:       false,
@@ -278,6 +354,7 @@ export default function LiftStationSizer() {
   useEffect(() => { saveLS('pump',       pump);       }, [pump]);
   useEffect(() => { saveLS('svgScale',   svgScale);  }, [svgScale]);
   useEffect(() => { saveLS('rightOrder', rightOrder); }, [rightOrder]);
+  useEffect(() => { saveLS('isDark',     isDark);     }, [isDark]);
 
   // ── Helpers ───────────────────────────────────────────────────────────────
   const startDrag = (type, id) => (e) => { e.preventDefault(); dragging.current = { type, id }; };
@@ -364,6 +441,11 @@ export default function LiftStationSizer() {
   const ticks = [];
   for (let e = Math.ceil(botShown); e <= Math.floor(topElev); e++) ticks.push(e);
 
+  // ── Theme — recomputed each render so sub-components pick it up via module-level vars ──
+  const T = isDark ? DARK : LIGHT;
+  styles = makeStyles(T);
+  S = { note: { fontSize: 10, color: T.textFaint, marginTop: 2 } };
+
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div style={styles.root}>
@@ -428,7 +510,20 @@ export default function LiftStationSizer() {
 
       {/* ═══ CENTER: SVG + Simulation controls ═══ */}
       <div style={styles.svgPane}>
-        <div style={styles.paneHeader}>LIFT STATION PROFILE</div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={styles.paneHeader}>LIFT STATION PROFILE</div>
+          <button
+            onClick={() => setIsDark(d => !d)}
+            title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            style={{
+              background: 'none', border: `1px solid ${T.border}`, borderRadius: 6,
+              cursor: 'pointer', fontSize: 15, padding: '2px 8px',
+              color: T.textSub, lineHeight: 1.4, marginBottom: 4,
+            }}
+          >
+            {isDark ? '☀' : '🌙'}
+          </button>
+        </div>
 
         <div style={{ position: 'relative', display: 'inline-flex', alignSelf: 'flex-start' }}>
         <svg ref={svgRef} viewBox={`0 0 ${SVG_W} ${SVG_H}`} width={SVG_W * svgScale} height={SVG_H * svgScale} style={styles.svg}>
@@ -486,31 +581,31 @@ export default function LiftStationSizer() {
           </defs>
 
           {/* Info line */}
-          <text x={SVG_W / 2} y={18} textAnchor="middle" fill="#475569" fontSize={10}>
+          <text x={SVG_W / 2} y={18} textAnchor="middle" fill={T.infoText} fontSize={10}>
             {wetWell.width}′ Ø wet well · {wetWell.depth}′ deep · Bot El {wetWell.bottomElev.toFixed(2)}′
           </text>
 
           {/* Elevation scale */}
-          <line x1={ML} y1={MT} x2={ML} y2={MT + DH} stroke="#1e3a5f" strokeWidth={1} />
+          <line x1={ML} y1={MT} x2={ML} y2={MT + DH} stroke={T.scaleAxis} strokeWidth={1} />
           {ticks.map(t => (
             <g key={t}>
-              <line x1={ML - (t % 2 === 0 ? 8 : 4)} y1={toY(t)} x2={ML} y2={toY(t)} stroke="#334155" strokeWidth={1} />
+              <line x1={ML - (t % 2 === 0 ? 8 : 4)} y1={toY(t)} x2={ML} y2={toY(t)} stroke={T.scaleTick} strokeWidth={1} />
               {t % 2 === 0 && (
-                <text x={ML - 10} y={toY(t) + 4} textAnchor="end" fill="#64748b" fontSize={10}>{t}</text>
+                <text x={ML - 10} y={toY(t) + 4} textAnchor="end" fill={T.elevLabel} fontSize={10}>{t}</text>
               )}
             </g>
           ))}
-          <text x={10} y={MT + DH / 2} textAnchor="middle" fill="#334155" fontSize={10}
+          <text x={10} y={MT + DH / 2} textAnchor="middle" fill={T.scaleTick} fontSize={10}
             transform={`rotate(-90 10 ${MT + DH / 2})`}>ELEV (ft)</text>
 
           {/* Ground hatch */}
           <line x1={WELL_LEFT - 25} y1={wellTopY} x2={WELL_RIGHT + 20} y2={wellTopY}
-            stroke="#78716c" strokeWidth={1} strokeDasharray="5,4" />
+            stroke={T.ground} strokeWidth={1} strokeDasharray="5,4" />
           {[-20, -2, 16, 34, 52, 70, 88].map((dx, i) => (
             <line key={i} x1={WELL_LEFT + dx} y1={wellTopY} x2={WELL_LEFT + dx - 8} y2={wellTopY + 9}
-              stroke="#6b5c45" strokeWidth={1} />
+              stroke={T.groundHatch} strokeWidth={1} />
           ))}
-          <text x={WELL_LEFT - 27} y={wellTopY - 5} textAnchor="end" fill="#78716c" fontSize={9}>GRD</text>
+          <text x={WELL_LEFT - 27} y={wellTopY - 5} textAnchor="end" fill={T.ground} fontSize={9}>GRD</text>
 
           {/* Water fill — uses displayWL */}
           {displayWL > wetWell.bottomElev && (() => {
@@ -520,8 +615,8 @@ export default function LiftStationSizer() {
             return (
               <>
                 <rect x={WELL_LEFT} y={wlY} width={WELL_PX_W} height={wellBotY - wlY}
-                  fill="#1e3a8a" opacity={0.65} />
-                <ellipse cx={cx} cy={wellBotY} rx={innerRX} ry={10} fill="#1e3a8a" opacity={0.65} />
+                  fill={T.waterFill} opacity={T.waterOpacity} />
+                <ellipse cx={cx} cy={wellBotY} rx={innerRX} ry={10} fill={T.waterFill} opacity={T.waterOpacity} />
               </>
             );
           })()}
@@ -536,13 +631,13 @@ export default function LiftStationSizer() {
             const isSubmerged = displayWL > wetWell.bottomElev;
             return (
               <>
-                <rect x={WELL_LEFT - wallT} y={wellTopY} width={wallT}  height={wellBotY - wellTopY} fill="#2d3f55" />
-                <rect x={WELL_RIGHT}        y={wellTopY} width={wallT}  height={wellBotY - wellTopY} fill="#2d3f55" />
-                <ellipse cx={cx} cy={wellBotY} rx={outerRX} ry={eRY + wallT / 2} fill="#2d3f55" />
+                <rect x={WELL_LEFT - wallT} y={wellTopY} width={wallT}  height={wellBotY - wellTopY} fill={T.wellWall} />
+                <rect x={WELL_RIGHT}        y={wellTopY} width={wallT}  height={wellBotY - wellTopY} fill={T.wellWall} />
+                <ellipse cx={cx} cy={wellBotY} rx={outerRX} ry={eRY + wallT / 2} fill={T.wellWall} />
                 <ellipse cx={cx} cy={wellBotY} rx={innerRX} ry={eRY}
-                  fill={isSubmerged ? '#1e3a8a' : '#0d1a2d'} opacity={isSubmerged ? 0.65 : 1} />
-                <ellipse cx={cx} cy={wellTopY} rx={outerRX} ry={eRY + wallT / 2} fill="#2d3f55" />
-                <ellipse cx={cx} cy={wellTopY} rx={innerRX} ry={eRY} fill="#0d1a2d" />
+                  fill={isSubmerged ? T.waterFill : T.wellInterior} opacity={isSubmerged ? T.waterOpacity : 1} />
+                <ellipse cx={cx} cy={wellTopY} rx={outerRX} ry={eRY + wallT / 2} fill={T.wellWall} />
+                <ellipse cx={cx} cy={wellTopY} rx={innerRX} ry={eRY} fill={T.wellInterior} />
               </>
             );
           })()}
@@ -560,37 +655,37 @@ export default function LiftStationSizer() {
             return (
               <>
                 <line x1={cx} y1={pTopY} x2={cx} y2={pTopY - 18}
-                  stroke="#475569" strokeWidth={4} strokeLinecap="round" />
+                  stroke={T.pumpStroke} strokeWidth={4} strokeLinecap="round" />
                 <rect x={pumpLeft} y={pTopY} width={pumpW} height={bodyH}
-                  fill="#162032" stroke="#475569" strokeWidth={1.5} rx={3} />
+                  fill={T.pumpBody} stroke={T.pumpStroke} strokeWidth={1.5} rx={3} />
                 {bodyH > 18 && (
                   <text x={cx} y={(pTopY + pBaseY) / 2 + 4} textAnchor="middle"
-                    fill="#475569" fontSize={9} fontWeight="bold" letterSpacing={1}>PUMP</text>
+                    fill={T.pumpLabel} fontSize={9} fontWeight="bold" letterSpacing={1}>PUMP</text>
                 )}
                 {bodyH > 34 && (
                   <>
-                    <rect x={cx - 26} y={pTopY + 13}  width={52} height={13} rx={3} fill="#0a0f1e" opacity={0.75} />
-                    <text x={cx} y={pTopY + 23} textAnchor="middle" fill="#7dd3fc" fontSize={10} fontWeight="700">{topAbsEl.toFixed(2)}′</text>
-                    <rect x={cx - 26} y={pBaseY - 26} width={52} height={13} rx={3} fill="#0a0f1e" opacity={0.75} />
-                    <text x={cx} y={pBaseY - 16} textAnchor="middle" fill="#7dd3fc" fontSize={10} fontWeight="700">{baseAbsEl.toFixed(2)}′</text>
+                    <rect x={cx - 26} y={pTopY + 13}  width={52} height={13} rx={3} fill={T.pumpElevBg} opacity={0.85} />
+                    <text x={cx} y={pTopY + 23} textAnchor="middle" fill={T.pumpElev} fontSize={10} fontWeight="700">{topAbsEl.toFixed(2)}′</text>
+                    <rect x={cx - 26} y={pBaseY - 26} width={52} height={13} rx={3} fill={T.pumpElevBg} opacity={0.85} />
+                    <text x={cx} y={pBaseY - 16} textAnchor="middle" fill={T.pumpElev} fontSize={10} fontWeight="700">{baseAbsEl.toFixed(2)}′</text>
                   </>
                 )}
-                <circle cx={cx} cy={pBaseY} r={6} fill="#1e293b" stroke="#38bdf8" strokeWidth={2}
+                <circle cx={cx} cy={pBaseY} r={6} fill={T.pumpHandle} stroke={T.accent} strokeWidth={2}
                   style={{ cursor: 'ns-resize' }} onMouseDown={startDrag('pump-base', null)} />
-                <circle cx={cx} cy={pTopY}  r={6} fill="#1e293b" stroke="#7dd3fc" strokeWidth={2}
+                <circle cx={cx} cy={pTopY}  r={6} fill={T.pumpHandle} stroke={T.accentSub} strokeWidth={2}
                   style={{ cursor: 'ns-resize' }} onMouseDown={startDrag('pump-top',  null)} />
               </>
             );
           })()}
 
           {/* Bottom invert + width dimension */}
-          <text x={(WELL_LEFT + WELL_RIGHT) / 2} y={wellBotY + 20} textAnchor="middle" fill="#64748b" fontSize={10}>
+          <text x={(WELL_LEFT + WELL_RIGHT) / 2} y={wellBotY + 20} textAnchor="middle" fill={T.elevLabel} fontSize={10}>
             INV {wetWell.bottomElev.toFixed(2)}′
           </text>
-          <line x1={WELL_LEFT}  y1={wellBotY + 33} x2={WELL_RIGHT} y2={wellBotY + 33} stroke="#334155" strokeWidth={1} />
-          <line x1={WELL_LEFT}  y1={wellBotY + 29} x2={WELL_LEFT}  y2={wellBotY + 37} stroke="#334155" strokeWidth={1} />
-          <line x1={WELL_RIGHT} y1={wellBotY + 29} x2={WELL_RIGHT} y2={wellBotY + 37} stroke="#334155" strokeWidth={1} />
-          <text x={(WELL_LEFT + WELL_RIGHT) / 2} y={wellBotY + 48} textAnchor="middle" fill="#64748b" fontSize={10}>
+          <line x1={WELL_LEFT}  y1={wellBotY + 33} x2={WELL_RIGHT} y2={wellBotY + 33} stroke={T.scaleTick} strokeWidth={1} />
+          <line x1={WELL_LEFT}  y1={wellBotY + 29} x2={WELL_LEFT}  y2={wellBotY + 37} stroke={T.scaleTick} strokeWidth={1} />
+          <line x1={WELL_RIGHT} y1={wellBotY + 29} x2={WELL_RIGHT} y2={wellBotY + 37} stroke={T.scaleTick} strokeWidth={1} />
+          <text x={(WELL_LEFT + WELL_RIGHT) / 2} y={wellBotY + 48} textAnchor="middle" fill={T.elevLabel} fontSize={10}>
             {wetWell.width}′ Ø
           </text>
 
@@ -609,16 +704,16 @@ export default function LiftStationSizer() {
               return (
                 <g key={`idim-${i}`} style={{ pointerEvents: 'none' }}>
                   {/* Short tick leaders from axis to dim line */}
-                  <line x1={ML} y1={yTop} x2={xDim + 3} y2={yTop} stroke="#334155" strokeWidth={0.75} strokeDasharray="3,2" />
-                  <line x1={ML} y1={yBot} x2={xDim + 3} y2={yBot} stroke="#334155" strokeWidth={0.75} strokeDasharray="3,2" />
+                  <line x1={ML} y1={yTop} x2={xDim + 3} y2={yTop} stroke={T.scaleTick} strokeWidth={0.75} strokeDasharray="3,2" />
+                  <line x1={ML} y1={yBot} x2={xDim + 3} y2={yBot} stroke={T.scaleTick} strokeWidth={0.75} strokeDasharray="3,2" />
                   {/* Vertical span arrow */}
-                  <line x1={xDim} y1={yTop} x2={xDim} y2={yBot} stroke="#7dd3fc" strokeWidth={1.5} />
-                  <polygon points={`${xDim},${yTop} ${xDim-3},${yTop+7} ${xDim+3},${yTop+7}`} fill="#7dd3fc" />
-                  <polygon points={`${xDim},${yBot} ${xDim-3},${yBot-7} ${xDim+3},${yBot-7}`} fill="#7dd3fc" />
+                  <line x1={xDim} y1={yTop} x2={xDim} y2={yBot} stroke={T.dimArrow} strokeWidth={1.5} />
+                  <polygon points={`${xDim},${yTop} ${xDim-3},${yTop+7} ${xDim+3},${yTop+7}`} fill={T.dimArrow} />
+                  <polygon points={`${xDim},${yBot} ${xDim-3},${yBot-7} ${xDim+3},${yBot-7}`} fill={T.dimArrow} />
                   {/* Distance label — only when enough room; no box, floats right of arrow line */}
                   {pixH >= 28 && (
                     <text x={xDim + 5} y={midY + 4} textAnchor="start"
-                      fill="#7dd3fc" fontSize={9} fontWeight="700">{dist}′</text>
+                      fill={T.dimArrow} fontSize={9} fontWeight="700">{dist}′</text>
                   )}
                 </g>
               );
@@ -671,7 +766,7 @@ export default function LiftStationSizer() {
                     <g style={{ pointerEvents: 'none' }}>
                       {/* Dark pill background */}
                       <rect x={wcx - rw / 2} y={wcy - rh / 2} width={rw} height={rh}
-                        rx={rh / 2} fill="#071220" opacity={0.88}
+                        rx={rh / 2} fill={T.chipBg} opacity={0.92}
                         className="flow-blink" />
                       {/* Three staggered wave tildes */}
                       <text x={wcx - 38} y={wcy + 5} fontSize={14} fontWeight="900"
@@ -696,24 +791,24 @@ export default function LiftStationSizer() {
           <line
             x1={WELL_LEFT - 14} x2={WELL_RIGHT + 14}
             y1={toY(displayWL)}  y2={toY(displayWL)}
-            stroke="#38bdf8" strokeWidth={simActive ? 2.5 : 2} strokeDasharray="6,3"
+            stroke={T.wlColor} strokeWidth={simActive ? 2.5 : 2} strokeDasharray="6,3"
             style={{ cursor: simActive ? 'default' : 'ns-resize' }}
             onMouseDown={simActive ? undefined : startDrag('water', null)}
           />
           {!simActive && (
             <polygon
               points={`${WELL_LEFT-15},${toY(displayWL)-6} ${WELL_LEFT-15},${toY(displayWL)+6} ${WELL_LEFT-6},${toY(displayWL)}`}
-              fill="#38bdf8" style={{ cursor: 'ns-resize' }}
+              fill={T.wlColor} style={{ cursor: 'ns-resize' }}
               onMouseDown={startDrag('water', null)}
             />
           )}
-          <text x={WELL_LEFT - 17} y={toY(displayWL) - 8}  textAnchor="end" fill="#38bdf8" fontSize={9}>WL</text>
-          <text x={WELL_LEFT - 17} y={toY(displayWL) + 15} textAnchor="end" fill="#38bdf8" fontSize={9}>{displayWL.toFixed(2)}′</text>
+          <text x={WELL_LEFT - 17} y={toY(displayWL) - 8}  textAnchor="end" fill={T.wlColor} fontSize={9}>WL</text>
+          <text x={WELL_LEFT - 17} y={toY(displayWL) + 15} textAnchor="end" fill={T.wlColor} fontSize={9}>{displayWL.toFixed(2)}′</text>
 
           {/* Sim: net-flow status pill */}
           {simActive && (
             <g style={{ pointerEvents: 'none' }}>
-              <rect x={WELL_LEFT + 20} y={MT + 2} width={WELL_PX_W - 40} height={16} rx={4} fill="#0a0f1e" opacity={0.9} />
+              <rect x={WELL_LEFT + 20} y={MT + 2} width={WELL_PX_W - 40} height={16} rx={4} fill={T.chipBg} opacity={0.9} />
               <text x={(WELL_LEFT + WELL_RIGHT) / 2} y={MT + 14} textAnchor="middle" fontSize={10} fontWeight="700"
                 fill={simNetGpm > 5 ? '#38bdf8' : simNetGpm < -5 ? '#ef4444' : '#22c55e'}>
                 {simNetGpm > 5 ? '▲' : simNetGpm < -5 ? '▼' : '●'} {simNetGpm > 0 ? '+' : ''}{simNetGpm.toFixed(0)} gpm net
@@ -755,15 +850,15 @@ export default function LiftStationSizer() {
               const dist = (upper.elevation - lower.elevation).toFixed(2);
               return (
                 <g key={`fdim-${i}`} style={{ pointerEvents: 'none' }}>
-                  <line x1={WELL_RIGHT} y1={yTop} x2={xDim + 4} y2={yTop} stroke="#475569" strokeWidth={0.75} strokeDasharray="3,2" />
-                  <line x1={WELL_RIGHT} y1={yBot} x2={xDim + 4} y2={yBot} stroke="#475569" strokeWidth={0.75} strokeDasharray="3,2" />
-                  <line x1={xDim} y1={yTop} x2={xDim} y2={yBot} stroke="#94a3b8" strokeWidth={1.5} />
-                  <polygon points={`${xDim},${yTop} ${xDim-3.5},${yTop+8} ${xDim+3.5},${yTop+8}`} fill="#94a3b8" />
-                  <polygon points={`${xDim},${yBot} ${xDim-3.5},${yBot-8} ${xDim+3.5},${yBot-8}`} fill="#94a3b8" />
+                  <line x1={WELL_RIGHT} y1={yTop} x2={xDim + 4} y2={yTop} stroke={T.textFaint} strokeWidth={0.75} strokeDasharray="3,2" />
+                  <line x1={WELL_RIGHT} y1={yBot} x2={xDim + 4} y2={yBot} stroke={T.textFaint} strokeWidth={0.75} strokeDasharray="3,2" />
+                  <line x1={xDim} y1={yTop} x2={xDim} y2={yBot} stroke={T.floatDimArrow} strokeWidth={1.5} />
+                  <polygon points={`${xDim},${yTop} ${xDim-3.5},${yTop+8} ${xDim+3.5},${yTop+8}`} fill={T.floatDimArrow} />
+                  <polygon points={`${xDim},${yBot} ${xDim-3.5},${yBot-8} ${xDim+3.5},${yBot-8}`} fill={T.floatDimArrow} />
                   {pixH >= 20 && (
                     <>
-                      <rect x={xDim - 20} y={midY - 9} width={40} height={16} rx={4} fill="#0a0f1e" opacity={0.9} />
-                      <text x={xDim} y={midY + 4} textAnchor="middle" fill="#94a3b8" fontSize={10} fontWeight="700">{dist}′</text>
+                      <rect x={xDim - 20} y={midY - 9} width={40} height={16} rx={4} fill={T.floatDimBg} opacity={0.9} />
+                      <text x={xDim} y={midY + 4} textAnchor="middle" fill={T.floatDimArrow} fontSize={10} fontWeight="700">{dist}′</text>
                     </>
                   )}
                 </g>
@@ -840,10 +935,10 @@ export default function LiftStationSizer() {
             style={{ position: 'absolute', bottom: 0, right: 0, width: 24, height: 24, cursor: 'nwse-resize', zIndex: 10 }}
           >
             <svg width={24} height={24} style={{ display: 'block' }}>
-              <polygon points="24,0 24,24 0,24" fill="#1e3a5f" opacity={0.9} />
-              <line x1={20} y1={4}  x2={4}  y2={20} stroke="#38bdf8" strokeWidth={1.5} strokeLinecap="round" />
-              <line x1={24} y1={10} x2={10} y2={24} stroke="#38bdf8" strokeWidth={1}   strokeLinecap="round" />
-              <line x1={24} y1={17} x2={17} y2={24} stroke="#38bdf8" strokeWidth={1}   strokeLinecap="round" />
+              <polygon points="24,0 24,24 0,24" fill={T.svgScaleBg} opacity={0.9} />
+              <line x1={20} y1={4}  x2={4}  y2={20} stroke={T.svgScaleLine} strokeWidth={1.5} strokeLinecap="round" />
+              <line x1={24} y1={10} x2={10} y2={24} stroke={T.svgScaleLine} strokeWidth={1}   strokeLinecap="round" />
+              <line x1={24} y1={17} x2={17} y2={24} stroke={T.svgScaleLine} strokeWidth={1}   strokeLinecap="round" />
             </svg>
           </div>
         </div>
@@ -862,10 +957,10 @@ export default function LiftStationSizer() {
             ↺ RESET
           </button>
           <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-            <span style={{ color: '#475569', fontSize: 11 }}>Speed</span>
+            <span style={{ color: T.textFaint, fontSize: 11 }}>Speed</span>
             <select value={sim.speedMultiplier}
               onChange={e => setSim(prev => ({ ...prev, speedMultiplier: +e.target.value }))}
-              style={{ background: '#1e293b', color: '#94a3b8', border: '1px solid #334155', borderRadius: 4, padding: '2px 6px', fontSize: 12 }}>
+              style={{ background: T.sectionHead, color: T.textSub, border: `1px solid ${T.borderMid}`, borderRadius: 4, padding: '2px 6px', fontSize: 12 }}>
               {[1, 5, 10, 30, 60].map(s => <option key={s} value={s}>{s}×</option>)}
             </select>
           </div>
@@ -905,7 +1000,7 @@ export default function LiftStationSizer() {
                   <div key={f.id} style={styles.itemBlock}>
                     {/* ── Type selector ── */}
                     <div style={{ marginBottom: 6 }}>
-                      <div style={{ fontSize: 9, color: '#475569', fontWeight: 700, letterSpacing: 1, marginBottom: 3 }}>FLOAT TYPE</div>
+                      <div style={{ fontSize: 9, color: T.textFaint, fontWeight: 700, letterSpacing: 1, marginBottom: 3 }}>FLOAT TYPE</div>
                       <select
                         value={f.type ?? 'custom'}
                         onChange={e => {
@@ -919,7 +1014,7 @@ export default function LiftStationSizer() {
                           } : x));
                         }}
                         style={{
-                          width: '100%', background: '#0a0f1e',
+                          width: '100%', background: T.inputBg,
                           border: `1px solid ${f.color}55`,
                           borderLeft: `3px solid ${f.color}`,
                           borderRadius: 4, color: f.color,
@@ -928,7 +1023,7 @@ export default function LiftStationSizer() {
                         }}
                       >
                         {FLOAT_TYPES.map(ft => (
-                          <option key={ft.value} value={ft.value} style={{ color: '#e2e8f0', background: '#0a0f1e' }}>
+                          <option key={ft.value} value={ft.value} style={{ color: T.text, background: T.inputBg }}>
                             {ft.label}
                           </option>
                         ))}
@@ -1007,8 +1102,8 @@ export default function LiftStationSizer() {
                       <span style={styles.unit}>in</span>
                     </div>
                   </div>
-                  <div style={{ borderTop: '1px solid #1e293b', paddingTop: 6 }}>
-                    <div style={{ fontSize: 10, color: '#38bdf8', fontWeight: 700, letterSpacing: 1, marginBottom: 5 }}>SIM FLOW</div>
+                  <div style={{ borderTop: `1px solid ${T.border}`, paddingTop: 6 }}>
+                    <div style={{ fontSize: 10, color: T.accent, fontWeight: 700, letterSpacing: 1, marginBottom: 5 }}>SIM FLOW</div>
                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                       <div style={styles.itemBody}>
                         <span style={styles.lbl}>Flow</span>
@@ -1039,32 +1134,32 @@ export default function LiftStationSizer() {
           /* ── VOLUMES ─────────────────────────────────────────────── */
           if (key === 'volumes') return (
             <Section key={key} title="VOLUMES" accent="#22d3ee" onMoveUp={up} onMoveDown={down}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6, paddingBottom: 4, borderBottom: '1px solid #1e293b' }}>
-                <span style={{ fontSize: 10, color: '#475569', fontWeight: 700 }}>SEGMENT</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6, paddingBottom: 4, borderBottom: `1px solid ${T.border}` }}>
+                <span style={{ fontSize: 10, color: T.textFaint, fontWeight: 700 }}>SEGMENT</span>
                 <div style={{ display: 'flex', gap: 20 }}>
-                  <span style={{ fontSize: 10, color: '#475569', fontWeight: 700, width: 40, textAlign: 'right' }}>SPAN</span>
-                  <span style={{ fontSize: 10, color: '#475569', fontWeight: 700, width: 64, textAlign: 'right' }}>VOLUME</span>
+                  <span style={{ fontSize: 10, color: T.textFaint, fontWeight: 700, width: 40, textAlign: 'right' }}>SPAN</span>
+                  <span style={{ fontSize: 10, color: T.textFaint, fontWeight: 700, width: 64, textAlign: 'right' }}>VOLUME</span>
                 </div>
               </div>
               {volSegments.map((seg, i) => (
-                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5, paddingBottom: 5, borderBottom: '1px solid #0f172a' }}>
+                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5, paddingBottom: 5, borderBottom: `1px solid ${T.borderFaint}` }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 5, flex: 1, minWidth: 0 }}>
                     <div style={{ width: 7, height: 7, borderRadius: '50%', background: seg.from.color, flexShrink: 0 }} />
-                    <span style={{ fontSize: 9, color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{seg.from.label}</span>
-                    <span style={{ fontSize: 9, color: '#334155' }}>→</span>
+                    <span style={{ fontSize: 9, color: T.textMid, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{seg.from.label}</span>
+                    <span style={{ fontSize: 9, color: T.borderMid }}>→</span>
                     <div style={{ width: 7, height: 7, borderRadius: '50%', background: seg.to.color, flexShrink: 0 }} />
-                    <span style={{ fontSize: 9, color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{seg.to.label}</span>
+                    <span style={{ fontSize: 9, color: T.textMid, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{seg.to.label}</span>
                   </div>
                   <div style={{ display: 'flex', gap: 10, flexShrink: 0, marginLeft: 6 }}>
-                    <span style={{ fontSize: 11, color: '#475569', width: 40, textAlign: 'right' }}>{seg.height.toFixed(2)}′</span>
+                    <span style={{ fontSize: 11, color: T.textFaint, width: 40, textAlign: 'right' }}>{seg.height.toFixed(2)}′</span>
                     <span style={{ fontSize: 12, color: seg.to.color, fontWeight: 700, width: 64, textAlign: 'right' }}>
                       {seg.gal >= 1000 ? `${(seg.gal / 1000).toFixed(2)}k` : seg.gal.toFixed(0)} gal
                     </span>
                   </div>
                 </div>
               ))}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, paddingTop: 6, borderTop: '1px solid #334155' }}>
-                <span style={{ fontSize: 11, color: '#94a3b8', fontWeight: 600 }}>Total (floor → WL)</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4, paddingTop: 6, borderTop: `1px solid ${T.borderMid}` }}>
+                <span style={{ fontSize: 11, color: T.textSub, fontWeight: 600 }}>Total (floor → WL)</span>
                 <span style={{ fontSize: 13, color: '#22d3ee', fontWeight: 700 }}>
                   {totalCurrentVol >= 1000 ? `${(totalCurrentVol / 1000).toFixed(2)}k` : totalCurrentVol.toFixed(0)} gal
                 </span>
@@ -1110,14 +1205,14 @@ export default function LiftStationSizer() {
                     val: (() => { const g = sim.cumulativeGalIn ?? 0; return g >= 1000 ? `${(g/1000).toFixed(2)}k gal` : `${g.toFixed(0)} gal`; })(),
                     color: '#22d3ee' },
                 ].map(({ label, val, color }) => (
-                  <div key={label} style={{ background: '#0d1a2d', borderRadius: 5, padding: '5px 8px' }}>
-                    <div style={{ fontSize: 9, color: '#475569', fontWeight: 700 }}>{label}</div>
+                  <div key={label} style={{ background: T.chipBg, borderRadius: 5, padding: '5px 8px' }}>
+                    <div style={{ fontSize: 9, color: T.textFaint, fontWeight: 700 }}>{label}</div>
                     <div style={{ fontSize: 13, color, fontWeight: 700, fontFamily: 'monospace' }}>{val}</div>
                   </div>
                 ))}
               </div>
 
-              <div style={{ fontSize: 10, color: '#64748b', fontWeight: 700, letterSpacing: 1, marginBottom: 4 }}>INLET TIMELINE</div>
+              <div style={{ fontSize: 10, color: T.textMid, fontWeight: 700, letterSpacing: 1, marginBottom: 4 }}>INLET TIMELINE</div>
               {(() => {
                 const ganttH = inlets.length * 22 + 20;
                 const W = 260;
@@ -1128,10 +1223,10 @@ export default function LiftStationSizer() {
                       const x = frac * (barW - 2) + 1;
                       return (
                         <g key={frac}>
-                          <line x1={x} y1={0} x2={x} y2={inlets.length * 22 + 2} stroke="#1e293b" strokeWidth={1} />
+                          <line x1={x} y1={0} x2={x} y2={inlets.length * 22 + 2} stroke={T.border} strokeWidth={1} />
                           <text x={x} y={ganttH - 3}
                             textAnchor={frac === 0 ? 'start' : frac === 1 ? 'end' : 'middle'}
-                            fill="#334155" fontSize={7}>
+                            fill={T.borderMid} fontSize={7}>
                             {fmtTime(frac * simMaxTime)}
                           </text>
                         </g>
@@ -1171,15 +1266,15 @@ export default function LiftStationSizer() {
                 const pts = hist.map(p => `${toChartX(p.t)},${toChartY(p.wl)}`).join(' ');
                 return (
                   <>
-                    <div style={{ fontSize: 10, color: '#64748b', fontWeight: 700, letterSpacing: 1, marginBottom: 4 }}>WATER LEVEL HISTORY</div>
+                    <div style={{ fontSize: 10, color: T.textMid, fontWeight: 700, letterSpacing: 1, marginBottom: 4 }}>WATER LEVEL HISTORY</div>
                     <svg viewBox={`0 0 ${cW} ${cH}`} width="100%" height={cH}
-                      style={{ display: 'block', background: '#0d1a2d', borderRadius: 4, border: '1px solid #1e293b', marginBottom: 8 }}>
+                      style={{ display: 'block', background: T.chartBg, borderRadius: 4, border: `1px solid ${T.chartBdr}`, marginBottom: 8 }}>
                       {floats.filter(f => f.elevation >= minWL2 && f.elevation <= minWL2 + wlRange).map(f => (
                         <line key={f.id}
                           x1={pad} y1={toChartY(f.elevation)} x2={cW - pad} y2={toChartY(f.elevation)}
                           stroke={f.color} strokeWidth={0.75} opacity={0.45} strokeDasharray="4,3" />
                       ))}
-                      <polyline points={pts} fill="none" stroke="#38bdf8" strokeWidth={2} />
+                      <polyline points={pts} fill="none" stroke={T.wlColor} strokeWidth={2} />
                     </svg>
                   </>
                 );
@@ -1187,11 +1282,11 @@ export default function LiftStationSizer() {
 
               {sim.events.length > 0 && (
                 <>
-                  <div style={{ fontSize: 10, color: '#64748b', fontWeight: 700, letterSpacing: 1, marginBottom: 4 }}>EVENTS</div>
+                  <div style={{ fontSize: 10, color: T.textMid, fontWeight: 700, letterSpacing: 1, marginBottom: 4 }}>EVENTS</div>
                   <div style={{ maxHeight: 150, overflowY: 'auto', fontSize: 10 }}>
                     {[...sim.events].reverse().map((ev, i) => (
-                      <div key={i} style={{ display: 'flex', gap: 7, padding: '3px 0', borderBottom: '1px solid #0f172a' }}>
-                        <span style={{ color: '#334155', fontFamily: 'monospace', flexShrink: 0, minWidth: 34 }}>{fmtTime(ev.t)}</span>
+                      <div key={i} style={{ display: 'flex', gap: 7, padding: '3px 0', borderBottom: `1px solid ${T.borderFaint}` }}>
+                        <span style={{ color: T.borderMid, fontFamily: 'monospace', flexShrink: 0, minWidth: 34 }}>{fmtTime(ev.t)}</span>
                         <span style={{ color: ev.type === 'pump' ? '#f97316' : ev.type === 'warn' ? '#ef4444' : '#38bdf8' }}>
                           {ev.msg}
                         </span>
@@ -1220,13 +1315,13 @@ function Section({ title, children, action, accent = '#7dd3fc', onMoveUp, onMove
       disabled={!handler}
       style={{
         background: 'none', border: 'none',
-        color: handler ? '#64748b' : '#1e293b',
+        color: handler ? styles.arrowOn : styles.arrowOff,
         cursor: handler ? 'pointer' : 'default',
         padding: '0 3px', fontSize: 10, lineHeight: 1,
         transition: 'color 0.15s',
       }}
-      onMouseEnter={e => { if (handler) e.currentTarget.style.color = '#94a3b8'; }}
-      onMouseLeave={e => { if (handler) e.currentTarget.style.color = '#64748b'; }}
+      onMouseEnter={e => { if (handler) e.currentTarget.style.color = styles.arrowHover; }}
+      onMouseLeave={e => { if (handler) e.currentTarget.style.color = styles.arrowOn; }}
     >{symbol}</button>
   );
   return (
@@ -1287,192 +1382,8 @@ function SumRow({ label, value, note }) {
   );
 }
 
-// Shared inline-style snippets (not in styles object since they're tiny one-offs)
-const S = {
-  note: { fontSize: 10, color: '#475569', marginTop: 2 },
-};
-
-// ─── Styles ──────────────────────────────────────────────────────────────────
-const styles = {
-  root: {
-    display: 'flex',
-    minHeight: '100vh',
-    fontFamily: "'Segoe UI', system-ui, sans-serif",
-    background: '#0a0f1e',
-    color: '#e2e8f0',
-    overflow: 'auto',
-  },
-  leftPanel: {
-    width: 250,
-    flexShrink: 0,
-    overflowY: 'auto',
-    padding: 12,
-    borderRight: '1px solid #1e293b',
-    background: '#0a0f1e',
-  },
-  svgPane: {
-    flexShrink: 0,
-    padding: 12,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 6,
-    borderRight: '1px solid #1e293b',
-    overflowY: 'auto',
-  },
-  rightPanel: {
-    width: 310,
-    flexShrink: 0,
-    overflowY: 'auto',
-    padding: 12,
-    background: '#0a0f1e',
-  },
-  panel: {
-    flex: 1,
-    overflowY: 'auto',
-    padding: 12,
-    minWidth: 280,
-    maxWidth: 420,
-  },
-  paneHeader: {
-    fontSize: 11,
-    fontWeight: 700,
-    letterSpacing: 2,
-    color: '#7dd3fc',
-    paddingBottom: 4,
-  },
-  svg: {
-    background: '#0d1a2d',
-    borderRadius: 8,
-    border: '1px solid #1e3a5f',
-    userSelect: 'none',
-    display: 'block',
-  },
-  simBar: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-    padding: '8px 2px 2px',
-    borderTop: '1px solid #1e293b',
-    flexWrap: 'wrap',
-  },
-  simBtn: {
-    padding: '5px 12px',
-    border: '1px solid',
-    borderRadius: 4,
-    fontSize: 12,
-    fontWeight: 700,
-    cursor: 'pointer',
-    letterSpacing: 0.5,
-  },
-  section: {
-    marginBottom: 12,
-    background: '#111827',
-    borderRadius: 8,
-    overflow: 'hidden',
-    border: '1px solid #1e293b',
-  },
-  sectionHeader: {
-    padding: '6px 10px',
-    background: '#1e293b',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  sectionTitle: {
-    fontSize: 11,
-    fontWeight: 700,
-    letterSpacing: 1.5,
-  },
-  sectionBody: {
-    padding: '8px 10px',
-  },
-  row: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 7,
-  },
-  lbl: {
-    fontSize: 11,
-    color: '#94a3b8',
-    flexShrink: 0,
-  },
-  unit: {
-    fontSize: 11,
-    color: '#475569',
-    flexShrink: 0,
-  },
-  numInput: {
-    width: 82,
-    background: '#0a0f1e',
-    border: '1px solid #334155',
-    borderRadius: 4,
-    color: '#e2e8f0',
-    padding: '3px 7px',
-    fontSize: 13,
-    textAlign: 'right',
-  },
-  textInput: {
-    flex: 1,
-    background: '#0a0f1e',
-    border: '1px solid #334155',
-    borderRadius: 4,
-    color: '#e2e8f0',
-    padding: '3px 6px',
-    fontSize: 12,
-  },
-  addBtn: {
-    background: '#1e3a8a',
-    color: '#bfdbfe',
-    border: 'none',
-    borderRadius: 4,
-    padding: '3px 9px',
-    fontSize: 11,
-    cursor: 'pointer',
-    fontWeight: 600,
-  },
-  delBtn: {
-    background: 'none',
-    border: 'none',
-    color: '#ef4444',
-    cursor: 'pointer',
-    fontSize: 14,
-    padding: '0 3px',
-    lineHeight: 1,
-  },
-  itemBlock: {
-    marginBottom: 10,
-    paddingBottom: 10,
-    borderBottom: '1px solid #1e293b',
-  },
-  itemHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 6,
-    marginBottom: 5,
-  },
-  itemBody: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 5,
-    flex: 1,
-  },
-  sumRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 6,
-    paddingBottom: 6,
-    borderBottom: '1px solid #1e293b',
-  },
-  sumVal: {
-    fontSize: 13,
-    color: '#e2e8f0',
-    fontWeight: 600,
-  },
-  sumNote: {
-    fontSize: 10,
-    color: '#64748b',
-    marginTop: 1,
-  },
-};
+// ─── Module-level style cache — recomputed each render via makeStyles(T) ───────
+// Sub-components (Section, Row, etc.) read from these module-level vars.
+// The component sets them before returning JSX so they are always current.
+let S      = { note: { fontSize: 10, color: DARK.textFaint, marginTop: 2 } };
+let styles = makeStyles(DARK);
